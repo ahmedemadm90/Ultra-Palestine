@@ -1,0 +1,31 @@
+<?php
+
+namespace App\Http\Middleware;
+
+use Closure;
+use Illuminate\Http\Request;
+
+class Employee
+{
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
+     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
+     */
+    public function handle(Request $request, Closure $next)
+    {
+        if($request->user()->role_id == 4 && $request->user()->active == 1 && $request->user()->office_id != null){
+            return $next($request);
+        }else{
+            $arr = [
+                'code'=>401,
+                'state'=>false,
+                'msg'=>'Unauthrized',
+                'data'=>'null'
+            ];
+            return response()->json($arr);
+        }
+    }
+}
